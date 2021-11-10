@@ -35,6 +35,8 @@ let mutable QUEUE_PRIORITY = init_queue SIZE_PRIORITY
 let mutable FST_INDEX_PRIORITY  = 0
 let mutable LST_INDEX_PRIORITY  = 0
 
+let FIVE_SECONDS = 5
+
 let increaseSizeQueue (queue : outref<Job []>) (size : byref<int>) : unit =
     let extraSpace = init_queue size in
     queue <- Array.append queue extraSpace
@@ -54,10 +56,34 @@ let scheduleJob (job : Job) : unit =
     else
         insertJob &QUEUE job &LST_INDEX_Q &SIZE_QUEUE
 
+let getAge (job : Job) : Seconds = (DateTime.Now - job.Submitted).Seconds
+
 let runNextJob unit : unit =
-// 1. If there is any job older than 5 seconds, it should run.
-// 2. If there are priority jobs, the oldest should run before any normal job.
-// 3. The oldest submitted job should run.
-    ()
+    let queueIsEmpty = FST_INDEX_Q == LST_INDEX_Q
+    let priorityQueueIsEmpty = FST_INDEX_PRIORITY == LST_INDEX_PRIORITY
+    let jobP = QUEUE_PRIORITY[FST_INDEX_PRIORITY]
+    let job  = QUEUE[FST_INDEX_Q]
+
+    // Checking if queues are empty
+    if queueIsEmpty && priorityQueueIsEmpty then
+        printfn "No jobs to run"
+    elif queueIsEmpty then
+        printfn "running priority job"
+    elif priorityQueueIsEmpty then
+        printfn "running normal job"
+    else
+        let jobAge  : Seconds = getAge(job)
+        let jobPAge : Seconds = getAge(jobP)
+
+        // If there is any job older than 5 seconds it gets executed.
+        if jobAge > FIVE_SECONDS || jobPAge > FIVE_SECONDS then
+            if jobPAge >= jobAge then
+                printfn "running priority job"
+            else
+                printfn "running normal job"
+        // If we both have a normal and a priority job younger than 5 seconds we
+        // always run the priority job.
+        else
+            printfn "running priority job"
 
 
