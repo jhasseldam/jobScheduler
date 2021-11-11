@@ -24,9 +24,11 @@ element is 0:
 
 first
 last
-```--------------------
+```
+--------------------
 |   |    |    |    |
---------------------```
+--------------------
+```
 
 
 If the queue is filled, meaning there are enqued 4 elements, we double the size
