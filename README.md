@@ -2,10 +2,10 @@
 Made by Camilla Krogh Dalsgaard
 
 ## Compile
-$ fsharpc jobScheduler.fs testing.fsx
+`$ fsharpc jobScheduler.fs testing.fsx`
 
 ## Execute in Mono runtime
-$ mono testing.exe
+`$ mono testing.exe`
 
 
 ## The Datastructure
