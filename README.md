@@ -22,9 +22,9 @@ A job is a record with the required fields.
 Both queues have size 4 when starting. Both the index for the first and last
 element is 0:
 
+```
 first
 last
-```
 --------------------
 |   |    |    |    |
 --------------------
@@ -34,20 +34,24 @@ last
 If the queue is filled, meaning there are enqued 4 elements, we double the size
 of the queue:
 
+```
 first                    last    first                   last
 ------------------------         --------------------------------------------
 |Job | Job | Job | Job |     ==> |Job | Job | Job | Job |    |    |    |    |
-------------------------          --------------------------------------------
+------------------------          -------------------------------------------
+```
 
 
 If we first fill 3 jobs into the queue, and then run these 3 jobs, we move both
 indexes back to 0 to utilize the memory allocated:
 
+```
                                                      first     first
 first             last                               last      last
 ----------------------- runNextJob () x3 -----------------      -----------------
 |Job | Job | Job |    |    ==>           |   |   |   |   |  =>  |   |   |   |   |
 -----------------------                  -----------------      -----------------
+```
 
 
 This choice of datastructure is made because it takes constant time O(1) to
@@ -67,17 +71,19 @@ reference.
 ## Future Work
 - Implement a queue as a record:
 
+```
 type Queue = {
     mutable Size : int
     mutable Queue : Queue
     mutable Fst_index : int
     mutable Lst_index : int
 }
+```
 
 
 - Consider having the priority queue and the other queue in a tuple:
 
-    (PRIORITY_QUEUE, QUEUE)
+    `(PRIORITY_QUEUE, QUEUE)`
 
 - Implement halving the size of the queue when some threshold is reached
 
